@@ -1,16 +1,14 @@
-
 package br.com.alura.screenmatch.principal;
 
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
-import br.com.alura.screenmatch.model.Episodio;
+import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -25,17 +23,17 @@ public class Principal {
 
     public void exibeMenu() {
         var opcao = -1;
-        while (opcao !=0) {
+        while(opcao != 0) {
             var menu = """
                     1 - Buscar séries
                     2 - Buscar episódios
-                    3 - Listar Séries Buscadas
+                    3 - Listar séries buscadas
                                     
                     0 - Sair                                 
                     """;
 
             System.out.println(menu);
-
+            opcao = leitura.nextInt();
             leitura.nextLine();
 
             switch (opcao) {
@@ -84,7 +82,12 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas(){
-        dadosSeries.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                .map(d -> new Serie(d))
+                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
-
 }
